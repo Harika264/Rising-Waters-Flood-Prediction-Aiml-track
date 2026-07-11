@@ -1,0 +1,259 @@
+{% extends "layout.html" %}
+
+{% block title %}Dashboard | Rising Waters{% endblock %}
+
+{% block content %}
+<div class="row slide-up">
+    <!-- Hero Section -->
+    <div class="col-12 mb-5 text-center">
+        <h1 class="display-4 fw-extrabold mb-3">Rising Waters</h1>
+        <p class="lead text-secondary mx-auto" style="max-width: 750px;">
+            A Machine Learning Approach to Flood Prediction using historical meteorological parameters.
+            Trained on multi-seasonal rainfall, humidity, cloud cover, and temperature features.
+        </p>
+        <div class="d-flex justify-content-center gap-3 mt-4">
+            <a href="{{ url_for('predict') }}" class="btn btn-premium btn-lg">
+                <i class="fa-solid fa-cloud-showers-water me-2"></i> Launch Prediction Panel
+            </a>
+        </div>
+    </div>
+
+    <!-- Stats Cards Grid -->
+    <div class="col-12 mb-5">
+        <div class="row g-4">
+            <div class="col-md-3">
+                <div class="glass-panel stat-card">
+                    <div class="stat-number">115</div>
+                    <div class="stat-label">Total Rows</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="glass-panel stat-card">
+                    <div class="stat-number">11</div>
+                    <div class="stat-label">Data Fields</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="glass-panel stat-card">
+                    <div class="stat-number">0</div>
+                    <div class="stat-label">Missing Values</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="glass-panel stat-card">
+                    <div class="stat-number" style="color: var(--accent-danger); -webkit-text-fill-color: var(--accent-danger);">13.9%</div>
+                    <div class="stat-label">Flood Imbalance</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Project Overview & Dataset Details -->
+    <div class="col-lg-6 mb-5">
+        <div class="glass-panel h-100">
+            <div class="card-header-gradient p-4">
+                <h4 class="mb-0"><i class="fa-solid fa-database text-info me-2"></i>Dataset & Feature Description</h4>
+            </div>
+            <div class="p-4">
+                <p class="text-secondary mb-4">
+                    The machine learning models are trained on regional historical weather observations comprising the following parameters:
+                </p>
+                <div class="table-responsive">
+                    <table class="table table-dark table-hover table-custom align-middle">
+                        <thead>
+                            <tr>
+                                <th>Feature</th>
+                                <th>Description</th>
+                                <th>DataType</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Temp</strong></td>
+                                <td>Average Temperature (28°C - 31°C)</td>
+                                <td><span class="badge bg-secondary">int64</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Humidity</strong></td>
+                                <td>Relative Humidity (70% - 79%)</td>
+                                <td><span class="badge bg-secondary">int64</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Cloud Cover</strong></td>
+                                <td>Cloud Cover Percentage (30% - 44%)</td>
+                                <td><span class="badge bg-secondary">int64</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Jun-Sep</strong></td>
+                                <td>Monsoon season precipitation (mm)</td>
+                                <td><span class="badge bg-info text-dark">float64</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>ANNUAL</strong></td>
+                                <td>Total Annual Precipitation (mm)</td>
+                                <td><span class="badge bg-info text-dark">float64</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>avgjune</strong></td>
+                                <td>Average Rainfall in June (mm)</td>
+                                <td><span class="badge bg-secondary">float64</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>sub</strong></td>
+                                <td>Sub-divisional rainfall subset (mm)</td>
+                                <td><span class="badge bg-secondary">float64</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Model Comparison Table -->
+    <div class="col-lg-6 mb-5">
+        <div class="glass-panel h-100">
+            <div class="card-header-gradient p-4">
+                <h4 class="mb-0"><i class="fa-solid fa-chart-simple text-info me-2"></i>Algorithm Comparison & Evaluation</h4>
+            </div>
+            <div class="p-4">
+                <p class="text-secondary mb-4">
+                    The models were tuned using 5-fold Stratified GridSearchCV. The target F1 score is optimized to handle the 86/14 class imbalance.
+                </p>
+                <div class="table-responsive">
+                    <table class="table table-dark table-hover table-custom align-middle">
+                        <thead>
+                            <tr>
+                                <th>Model</th>
+                                <th>Accuracy</th>
+                                <th>Precision</th>
+                                <th>Recall</th>
+                                <th>F1 Score</th>
+                                <th>ROC-AUC</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="table-active border-info border-start border-3">
+                                <td><strong>Random Forest</strong> <span class="badge bg-success">Best</span></td>
+                                <td>95.6%</td>
+                                <td>1.00</td>
+                                <td>0.67</td>
+                                <td class="text-success fw-bold">0.80</td>
+                                <td class="text-success fw-bold">0.95</td>
+                            </tr>
+                            <tr>
+                                <td>Decision Tree</td>
+                                <td>95.6%</td>
+                                <td>1.00</td>
+                                <td>0.67</td>
+                                <td>0.80</td>
+                                <td>0.83</td>
+                            </tr>
+                            <tr>
+                                <td>XGBoost</td>
+                                <td>87.0%</td>
+                                <td>0.00</td>
+                                <td>0.00</td>
+                                <td>0.00</td>
+                                <td>0.97</td>
+                            </tr>
+                            <tr>
+                                <td>K-Nearest Neighbours</td>
+                                <td>82.6%</td>
+                                <td>0.33</td>
+                                <td>0.33</td>
+                                <td>0.33</td>
+                                <td>0.77</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="alert bg-dark border-glass mt-3 text-secondary" style="font-size: 0.9rem;">
+                    <strong>Decision Detail:</strong> Random Forest Classifier was selected due to its superior ROC-AUC (0.95) and stable ensemble structure compared to a single Decision Tree, despite matching F1 scores.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Visualizations Carousel -->
+    <div class="col-12 mb-5">
+        <div class="glass-panel">
+            <div class="card-header-gradient p-4">
+                <h4 class="mb-0"><i class="fa-solid fa-images text-info me-2"></i>Exploratory Data Analysis Plots</h4>
+            </div>
+            <div class="p-4">
+                <div id="edaCarousel" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-indicators">
+                        <button type="button" data-bs-target="#edaCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                        <button type="button" data-bs-target="#edaCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                        <button type="button" data-bs-target="#edaCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                        <button type="button" data-bs-target="#edaCarousel" data-bs-slide-to="3" aria-label="Slide 4"></button>
+                        <button type="button" data-bs-target="#edaCarousel" data-bs-slide-to="4" aria-label="Slide 5"></button>
+                    </div>
+                    <div class="carousel-inner carousel-inner-custom" style="min-height: 500px; background: #000;">
+                        <!-- Slide 1: Correlation Matrix -->
+                        <div class="carousel-item active">
+                            <div class="text-center p-3" style="min-height: 480px; display: flex; align-items: center; justify-content: center;">
+                                <img src="{{ url_for('static', filename='images/02_correlation_heatmap.png') }}" class="img-fluid rounded" style="max-height: 420px; object-fit: contain;" alt="Correlation Heatmap">
+                            </div>
+                            <div class="carousel-caption-custom">
+                                <h5>Correlation Heatmap</h5>
+                                <p class="text-secondary mb-0">Illustrates linear correlation coefficients between features. The monsoon rainfall (Jun-Sep) has the strongest correlation with flooding (+0.71), followed by Annual Rainfall (+0.63).</p>
+                            </div>
+                        </div>
+                        <!-- Slide 2: Feature Importance -->
+                        <div class="carousel-item">
+                            <div class="text-center p-3" style="min-height: 480px; display: flex; align-items: center; justify-content: center;">
+                                <img src="{{ url_for('static', filename='images/07_feature_importance.png') }}" class="img-fluid rounded" style="max-height: 420px; object-fit: contain;" alt="Feature Importance">
+                            </div>
+                            <div class="carousel-caption-custom">
+                                <h5>Model Feature Importance</h5>
+                                <p class="text-secondary mb-0">Random Forest importance scores indicate that Jun-Sep rainfall drives over 54% of the split decisions, followed by ANNUAL rainfall at 23%.</p>
+                            </div>
+                        </div>
+                        <!-- Slide 3: Distributions -->
+                        <div class="carousel-item">
+                            <div class="text-center p-3" style="min-height: 480px; display: flex; align-items: center; justify-content: center;">
+                                <img src="{{ url_for('static', filename='images/03_feature_distributions.png') }}" class="img-fluid rounded" style="max-height: 420px; object-fit: contain;" alt="Feature Distributions">
+                            </div>
+                            <div class="carousel-caption-custom">
+                                <h5>Feature Value Distributions</h5>
+                                <p class="text-secondary mb-0">Histogram and KDE density plots. Shows rainfall quantities are continuous, while Cloud Cover, Humidity, and Temperature are discrete.</p>
+                            </div>
+                        </div>
+                        <!-- Slide 4: Box Plots -->
+                        <div class="carousel-item">
+                            <div class="text-center p-3" style="min-height: 480px; display: flex; align-items: center; justify-content: center;">
+                                <img src="{{ url_for('static', filename='images/04_feature_boxplots.png') }}" class="img-fluid rounded" style="max-height: 420px; object-fit: contain;" alt="Feature Boxplots">
+                            </div>
+                            <div class="carousel-caption-custom">
+                                <h5>Box Plots by Flood Target</h5>
+                                <p class="text-secondary mb-0">Contrasts weather values against target outcomes. Clearly shows that flooding (1) is strongly linked to elevated Annual and Monsoon rainfall medians.</p>
+                            </div>
+                        </div>
+                        <!-- Slide 5: Relationship Scatter -->
+                        <div class="carousel-item">
+                            <div class="text-center p-3" style="min-height: 480px; display: flex; align-items: center; justify-content: center;">
+                                <img src="{{ url_for('static', filename='images/06_feature_relationship.png') }}" class="img-fluid rounded" style="max-height: 420px; object-fit: contain;" alt="Feature Relationship">
+                            </div>
+                            <div class="carousel-caption-custom">
+                                <h5>Jun-Sep Rainfall vs ANNUAL Rainfall Scatter</h5>
+                                <p class="text-secondary mb-0">Scatter relationship overlay. Explains that flooding (red dots) occurs exclusively at the upper right region (monsoon > 2500mm and annual > 3200mm).</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Controls -->
+                    <button class="carousel-control-prev" type="button" data-bs-target="#edaCarousel" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#edaCarousel" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

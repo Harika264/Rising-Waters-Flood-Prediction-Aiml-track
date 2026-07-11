@@ -1,0 +1,132 @@
+{% extends "layout.html" %}
+
+{% block title %}Prediction Panel | Rising Waters{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center slide-up">
+    <div class="col-xl-10">
+        <!-- Main Form Card -->
+        <div class="glass-panel">
+            <div class="card-header-gradient p-4 text-center">
+                <h2 class="mb-1"><i class="fa-solid fa-cloud-showers-heavy text-info me-2"></i>Hazard Assessment Panel</h2>
+                <p class="text-secondary mb-0">Input local meteorological readings below to run our Random Forest prediction pipeline.</p>
+            </div>
+            
+            <div class="p-4 p-md-5">
+                <form id="flood-prediction-form" action="{{ url_for('predict_logic') }}" method="POST">
+                    
+                    <div class="row g-4">
+                        <!-- Left Column: General Meteorological Readings -->
+                        <div class="col-lg-5">
+                            <div class="p-4 rounded-4 h-100" style="background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.04);">
+                                <h4 class="mb-4 text-info"><i class="fa-solid fa-temperature-half me-2"></i>Atmospheric Readings</h4>
+                                
+                                <!-- Temperature -->
+                                <div class="mb-3">
+                                    <label for="Temp" class="form-label form-label-custom">
+                                        Average Temperature (°C)
+                                        <i class="fa-solid fa-circle-info info-icon ms-1" data-bs-toggle="tooltip" title="Historical dataset ranges between 28°C and 31°C."></i>
+                                    </label>
+                                    <input type="number" step="1" name="Temp" id="Temp" class="form-control form-control-custom" placeholder="e.g., 29" value="29" required>
+                                </div>
+
+                                <!-- Humidity -->
+                                <div class="mb-3">
+                                    <label for="Humidity" class="form-label form-label-custom">
+                                        Relative Humidity (%)
+                                        <i class="fa-solid fa-circle-info info-icon ms-1" data-bs-toggle="tooltip" title="Historical dataset ranges between 70% and 79%."></i>
+                                    </label>
+                                    <input type="number" step="1" name="Humidity" id="Humidity" class="form-control form-control-custom" placeholder="e.g., 74" value="74" required>
+                                </div>
+
+                                <!-- Cloud Cover -->
+                                <div class="mb-3">
+                                    <label for="Cloud Cover" class="form-label form-label-custom">
+                                        Cloud Cover (%)
+                                        <i class="fa-solid fa-circle-info info-icon ms-1" data-bs-toggle="tooltip" title="Historical dataset ranges between 30% and 44%."></i>
+                                    </label>
+                                    <input type="number" step="1" name="Cloud Cover" id="Cloud Cover" class="form-control form-control-custom" placeholder="e.g., 36" value="36" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right Column: Rainfall Readings -->
+                        <div class="col-lg-7">
+                            <div class="p-4 rounded-4" style="background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.04);">
+                                <h4 class="mb-4 text-info"><i class="fa-solid fa-cloud-rain me-2"></i>Rainfall Readings (mm)</h4>
+                                
+                                <div class="row g-3">
+                                    <!-- Jan-Feb -->
+                                    <div class="col-md-6">
+                                        <label for="Jan-Feb" class="form-label form-label-custom">Jan-Feb Rainfall</label>
+                                        <input type="number" step="0.1" name="Jan-Feb" id="Jan-Feb" class="form-control form-control-custom" placeholder="e.g., 27.7" value="27.7" required>
+                                    </div>
+                                    <!-- Mar-May -->
+                                    <div class="col-md-6">
+                                        <label for="Mar-May" class="form-label form-label-custom">Mar-May Rainfall</label>
+                                        <input type="number" step="0.1" name="Mar-May" id="Mar-May" class="form-control form-control-custom" placeholder="e.g., 377.2" value="377.2" required>
+                                    </div>
+                                    <!-- Jun-Sep -->
+                                    <div class="col-md-6">
+                                        <label for="Jun-Sep" class="form-label form-label-custom">
+                                            Jun-Sep Rainfall (Monsoon)
+                                            <i class="fa-solid fa-circle-info info-icon ms-1" data-bs-toggle="tooltip" title="Highly correlated with floods. Non-flood median is ~1950 mm; flood median is ~3070 mm."></i>
+                                        </label>
+                                        <input type="number" step="0.1" name="Jun-Sep" id="Jun-Sep" class="form-control form-control-custom" placeholder="e.g., 2022.8" value="2022.8" required>
+                                    </div>
+                                    <!-- Oct-Dec -->
+                                    <div class="col-md-6">
+                                        <label for="Oct-Dec" class="form-label form-label-custom">Oct-Dec Rainfall</label>
+                                        <input type="number" step="0.1" name="Oct-Dec" id="Oct-Dec" class="form-control form-control-custom" placeholder="e.g., 497.6" value="497.6" required>
+                                    </div>
+                                    
+                                    <!-- ANNUAL -->
+                                    <div class="col-md-12">
+                                        <label for="ANNUAL" class="form-label form-label-custom">
+                                            Total ANNUAL Rainfall
+                                            <i class="fa-solid fa-circle-info info-icon ms-1" data-bs-toggle="tooltip" title="Automatically calculated from the sum of seasons above, but can be overridden."></i>
+                                        </label>
+                                        <input type="number" step="0.1" name="ANNUAL" id="ANNUAL" class="form-control form-control-custom" placeholder="e.g., 2925.4" value="2925.4" required>
+                                    </div>
+
+                                    <!-- avgjune -->
+                                    <div class="col-md-6">
+                                        <label for="avgjune" class="form-label form-label-custom">Average June Rainfall</label>
+                                        <input type="number" step="0.1" name="avgjune" id="avgjune" class="form-control form-control-custom" placeholder="e.g., 218.1" value="218.1" required>
+                                    </div>
+                                    
+                                    <!-- sub -->
+                                    <div class="col-md-6">
+                                        <label for="sub" class="form-label form-label-custom">
+                                            Sub-division Rainfall
+                                            <i class="fa-solid fa-circle-info info-icon ms-1" data-bs-toggle="tooltip" title="Sub-divisional partition rainfall value."></i>
+                                        </label>
+                                        <input type="number" step="0.1" name="sub" id="sub" class="form-control form-control-custom" placeholder="e.g., 439.8" value="439.8" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="d-flex justify-content-end gap-3 mt-5">
+                        <button type="reset" class="btn btn-secondary-glass btn-lg"><i class="fa-solid fa-rotate-left me-2"></i>Reset</button>
+                        <button type="submit" class="btn btn-premium btn-lg"><i class="fa-solid fa-microchip me-2"></i>Evaluate Flood Risk</button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Enable Tooltips Bootstrap -->
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+    });
+</script>
+{% endblock %}

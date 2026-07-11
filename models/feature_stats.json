@@ -1,0 +1,102 @@
+{
+    "Temp": {
+        "overall_mean": 29.6,
+        "overall_median": 30.0,
+        "overall_min": 28.0,
+        "overall_max": 31.0,
+        "no_flood_median": 30.0,
+        "flood_median": 29.5,
+        "no_flood_mean": 29.636363636363637,
+        "flood_mean": 29.375
+    },
+    "Humidity": {
+        "overall_mean": 73.85217391304347,
+        "overall_median": 74.0,
+        "overall_min": 70.0,
+        "overall_max": 79.0,
+        "no_flood_median": 73.0,
+        "flood_median": 74.0,
+        "no_flood_mean": 73.82828282828282,
+        "flood_mean": 74.0
+    },
+    "Cloud Cover": {
+        "overall_mean": 36.28695652173913,
+        "overall_median": 36.0,
+        "overall_min": 30.0,
+        "overall_max": 44.0,
+        "no_flood_median": 36.0,
+        "flood_median": 39.5,
+        "no_flood_mean": 36.13131313131313,
+        "flood_mean": 37.25
+    },
+    "ANNUAL": {
+        "overall_mean": 2925.487826086957,
+        "overall_median": 2937.5,
+        "overall_min": 2068.8,
+        "overall_max": 4257.8,
+        "no_flood_median": 2848.6,
+        "flood_median": 3487.1499999999996,
+        "no_flood_mean": 2819.5737373737375,
+        "flood_mean": 3580.8312499999997
+    },
+    "Jan-Feb": {
+        "overall_mean": 27.739130434782613,
+        "overall_median": 20.5,
+        "overall_min": 0.3,
+        "overall_max": 98.1,
+        "no_flood_median": 20.5,
+        "flood_median": 22.95,
+        "no_flood_mean": 28.494949494949495,
+        "flood_mean": 23.0625
+    },
+    "Mar-May": {
+        "overall_mean": 377.2539130434783,
+        "overall_median": 342.0,
+        "overall_min": 89.9,
+        "overall_max": 915.2,
+        "no_flood_median": 347.6,
+        "flood_median": 329.6,
+        "no_flood_mean": 378.3181818181818,
+        "flood_mean": 370.66875000000005
+    },
+    "Jun-Sep": {
+        "overall_mean": 2022.8408695652174,
+        "overall_median": 1948.7,
+        "overall_min": 1104.3,
+        "overall_max": 3451.3,
+        "no_flood_median": 1933.2,
+        "flood_median": 2571.55,
+        "no_flood_mean": 1913.8141414141414,
+        "flood_mean": 2697.44375
+    },
+    "Oct-Dec": {
+        "overall_mean": 497.6365217391305,
+        "overall_median": 501.5,
+        "overall_min": 166.6,
+        "overall_max": 823.3,
+        "no_flood_median": 502.1,
+        "flood_median": 444.15,
+        "no_flood_mean": 498.9282828282828,
+        "flood_mean": 489.64375
+    },
+    "avgjune": {
+        "overall_mean": 218.10086956521738,
+        "overall_median": 211.0333333333333,
+        "overall_min": 65.60000000000001,
+        "overall_max": 366.0666666666667,
+        "no_flood_median": 202.4333333333333,
+        "flood_median": 287.2833333333333,
+        "no_flood_mean": 208.5929292929293,
+        "flood_mean": 276.93125
+    },
+    "sub": {
+        "overall_mean": 439.8017391304349,
+        "overall_median": 430.6,
+        "overall_min": 34.19999999999999,
+        "overall_max": 982.7,
+        "no_flood_median": 396.3,
+        "flood_median": 656.0,
+        "no_flood_mean": 410.3353535353536,
+        "flood_mean": 622.125
+    }
+}

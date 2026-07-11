@@ -1,0 +1,131 @@
+{% extends "layout.html" %}
+
+{% block title %}Assessment Result | Rising Waters{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center slide-up">
+    <div class="col-xl-11">
+        
+        <!-- Page Title -->
+        <div class="text-center mb-5">
+            <h2 class="display-6 fw-bold">Assessment Report</h2>
+            <p class="text-secondary">Diagnostic breakdown of the meteorological evaluation.</p>
+        </div>
+
+        <!-- 1. Include Modular Warning or Safe Section -->
+        {% if explanation.prediction == 1 %}
+            {% include "flood.html" %}
+        {% else %}
+            {% include "no_flood.html" %}
+        {% endif %}
+
+        <!-- 2. Main Metrics Dashboard (Confidence Gauge & Chart.js) -->
+        <div class="row g-4 mb-4">
+            
+            <!-- Gauge Card -->
+            <div class="col-lg-4">
+                <div class="glass-panel p-4 text-center h-100 d-flex flex-column justify-content-center">
+                    <h5 class="text-secondary mb-4">Confidence Level</h5>
+                    
+                    <div class="gauge-container mb-3">
+                        <div class="gauge-bg"></div>
+                        <div class="gauge-fill {% if explanation.prediction == 1 %}high{% else %}low{% endif %}" 
+                             style="transform: rotate({{ (explanation.confidence_score / 100) * 180 }}deg);"></div>
+                        <div class="gauge-value" style="color: {% if explanation.prediction == 1 %}var(--accent-danger){% else %}var(--accent-success){% endif %};">
+                            {{ explanation.confidence_score }}%
+                        </div>
+                    </div>
+                    
+                    <div class="mt-2">
+                        <span class="{% if explanation.prediction == 1 %}badge-risk-high{% else %}badge-risk-low{% endif %}">
+                            {{ explanation.risk_level }}
+                        </span>
+                    </div>
+                    <p class="text-muted small mt-3 mb-0">
+                        *Confidence score is calculated based on the prediction probability output of the Random Forest model.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Chart.js Attribution Explanation -->
+            <div class="col-lg-8">
+                <div class="glass-panel p-4 h-100">
+                    <h5 class="text-white mb-2"><i class="fa-solid fa-chart-column text-info me-2"></i>Prediction Drivers (Attributions)</h5>
+                    <p class="text-secondary small mb-3">
+                        Visualizes how much each input increased (red) or decreased (green) the likelihood of a flood relative to historical safe medians.
+                    </p>
+                    <div style="position: relative; height: 260px;">
+                        <canvas id="contributionChart" data-contributions='{{ explanation.chart_data|tojson }}'></canvas>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- 3. Detailed Data Table (Feature Comparison) -->
+        <div class="glass-panel mb-5">
+            <div class="card-header-gradient p-4">
+                <h4 class="mb-0"><i class="fa-solid fa-calculator text-info me-2"></i>Detailed Parameter Log</h4>
+            </div>
+            <div class="p-4">
+                <p class="text-secondary mb-4">{{ explanation.summary }}</p>
+                
+                <div class="table-responsive">
+                    <table class="table table-dark table-hover table-custom align-middle">
+                        <thead>
+                            <tr>
+                                <th>Weather Parameter</th>
+                                <th class="text-center">Your Input</th>
+                                <th class="text-center">Historical Safe Median</th>
+                                <th>Deviation Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in explanation.details %}
+                            <tr>
+                                <td><strong>{{ item.name }}</strong></td>
+                                <td class="text-center fw-semibold text-white">
+                                    {% if item.feature == 'Temp' %}
+                                        {{ item.value }}°C
+                                    {% elif item.feature == 'Humidity' or item.feature == 'Cloud Cover' %}
+                                        {{ item.value }}%
+                                    {% else %}
+                                        {{ item.value }} mm
+                                    {% endif %}
+                                </td>
+                                <td class="text-center text-secondary">
+                                    {% if item.feature == 'Temp' %}
+                                        {{ item.baseline }}°C
+                                    {% elif item.feature == 'Humidity' or item.feature == 'Cloud Cover' %}
+                                        {{ item.baseline }}%
+                                    {% else %}
+                                        {{ item.baseline }} mm
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if item.status == 'higher' %}
+                                        <span class="text-danger fw-bold"><i class="fa-solid fa-caret-up me-1"></i>+{{ item.percent }}%</span>
+                                    {% elif item.status == 'lower' %}
+                                        <span class="text-success fw-bold"><i class="fa-solid fa-caret-down me-1"></i>-{{ item.percent }}%</span>
+                                    {% else %}
+                                        <span class="text-secondary"><i class="fa-solid fa-minus me-1"></i>Normal</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Back Button -->
+        <div class="text-center mb-5">
+            <a href="{{ url_for('predict') }}" class="btn btn-secondary-glass btn-lg px-5">
+                <i class="fa-solid fa-arrow-left me-2"></i> Run Another Assessment
+            </a>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
