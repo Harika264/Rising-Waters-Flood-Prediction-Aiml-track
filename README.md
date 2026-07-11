@@ -190,3 +190,4 @@ If using Cloud Foundry, the app relies on the `Procfile` and `runtime.txt` setti
 3. **Time-Series Forecasting**: Upgrade from static classification to LSTM-based rainfall forecasting models.
 4. **SHAP Interactive Visualizations**: Render fully interactive SHAP force plots on the frontend for detailed transparency.
 "# rainfall" 
+"# rain" 
