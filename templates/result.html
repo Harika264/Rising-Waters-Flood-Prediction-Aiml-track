@@ -55,7 +55,7 @@
                         Visualizes how much each input increased (red) or decreased (green) the likelihood of a flood relative to historical safe medians.
                     </p>
                     <div style="position: relative; height: 260px;">
-                        <canvas id="contributionChart" data-contributions='{{ explanation.chart_data|tojson }}'></canvas>
+                        <canvas id="contributionChart" data-contributions="{{ explanation.chart_data|tojson }}"></canvas>
                     </div>
                 </div>
             </div>
